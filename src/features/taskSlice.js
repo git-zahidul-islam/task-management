@@ -40,6 +40,23 @@ const taskSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    taskUpdateRequest: (state) => {
+        state.loading = true;
+        state.error = null;
+      },
+      taskUpdateSuccess: (state, action) => {
+        state.loading = false;
+        state.success = action.payload;
+        // Update the tasks array with the edited task
+        const index = state.tasks.findIndex(task => task._id === action.payload._id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload; // Replace the updated task
+        }
+      },
+      taskUpdateFailure: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      },
   },
 });
 
@@ -51,6 +68,9 @@ export const {
   taskFetchRequest,
   taskFetchSuccess,
   taskFetchFailure,
+  taskUpdateRequest,
+  taskUpdateSuccess,
+  taskUpdateFailure,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;
@@ -94,3 +114,38 @@ export const fetchTasks = () => async (dispatch) => {
     dispatch(taskFetchFailure(error.message));
   }
 };
+
+// update
+// update
+// Thunk function for updating a task
+// Thunk function for updating a task
+export const updateTask = (taskData) => async (dispatch) => {
+    console.log("Updating task with ID:", taskData._id); // Debug log to see the ID
+    dispatch(taskUpdateRequest());
+    try {
+        // Create a new object without the _id field
+        const { _id, ...updatedData } = taskData; // Destructure to exclude _id
+
+        const response = await fetch(`http://localhost:3000/api/update/${_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData), // Send updatedData instead of taskData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Update error response:", errorData); // Log the error response for debugging
+            throw new Error(errorData.message || 'Failed to update task');
+        }
+
+        const data = await response.json();
+        console.log("Update response data:", data); // Log the successful response data
+        dispatch(taskUpdateSuccess(data)); // Make sure the data structure matches your expectations
+    } catch (error) {
+        console.error("Update task error:", error); // Log any errors caught
+        dispatch(taskUpdateFailure(error.message));
+    }
+};
+

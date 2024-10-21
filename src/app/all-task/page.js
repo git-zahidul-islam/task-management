@@ -1,9 +1,10 @@
 "use client"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks } from "@/features/taskSlice";  // Import fetchTasks thunk
 import Skeleton from "@/components/skeleton/Skeleton";
 import dynamic from "next/dynamic";
+import EditTaskDialog from "@/components/editTaskDialog/EditTaskDialog"; // Import your dialog
 
 const Card = dynamic(() => import('@/components/card/Card'), {
   loading: () => <Skeleton />,
@@ -14,21 +15,33 @@ export default function AllTask() {
   const dispatch = useDispatch();
   
   // Use selectors to get state from Redux store
-  const { tasks, loading, error } = useSelector((state) => state.task);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const tasks = useSelector((state) => state.task.tasks);
 
   // Fetch tasks when the component mounts
   useEffect(() => {
     dispatch(fetchTasks());  // Dispatch fetchTasks thunk
   }, [dispatch]);
 
+  const handleEditClick = (task) => {
+    setSelectedTask(task);
+    setIsOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false); // Close the dialog
+    setSelectedTask(null); // Reset selected task
+  };
+
   const handleDelete = (taskId) => {
     console.log(`Deleting task with id: ${taskId}`);
-    // Add your delete logic here
+    
   };
 
   // Handle loading and error states
-  if (loading) return <Skeleton/>
-  if (error) return <p>Error: {error}</p>;
+//   if (loading) return <p>Loading...</p>;
+//   if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="space-y-4 w-[50%] mx-auto">
@@ -42,8 +55,12 @@ export default function AllTask() {
           dueDate={task.dueDate}
           priority={task.priority}
           handleDelete={() => handleDelete(task._id)}
+          handleEdit={() => handleEditClick(task)} // Add edit handler
         />
       ))}
+     {isOpen && (
+        <EditTaskDialog task={selectedTask} onClose={() => setIsOpen(false)} />
+      )}
     </div>
   );
 }

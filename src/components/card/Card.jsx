@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card = ({taskName,description,dueDate,priority,handleDelete}) => {
+const Card = ({taskName,description,dueDate,priority,handleDelete,handleEdit}) => {
     return (
         <div className="flex border rounded-lg shadow-md p-4 bg-white">
             {/* Left Side */}
@@ -22,7 +22,7 @@ const Card = ({taskName,description,dueDate,priority,handleDelete}) => {
                 {/* Right Side Bottom */}
                 <div className="flex justify-between">
                     <button
-                        
+                        onClick={handleEdit}                        
                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                     >
                         Edit
