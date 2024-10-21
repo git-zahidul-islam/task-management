@@ -1,7 +1,7 @@
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "@/components/skeleton/Skeleton";
 import dynamic from "next/dynamic";
 
-const TaskCreate = dynamic(()=> import('@/components/TaskCreate'),{
+const TaskCreate = dynamic(()=> import('@/components/TaskCreate/TaskCreate'),{
   loading: ()=> <Skeleton/>,
   ssr: true,
 })

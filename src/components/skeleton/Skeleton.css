@@ -1,0 +1,19 @@
+/* Skeleton.css */
+
+.skeleton {
+    height: 100%; /* Equivalent to h-full */
+    width: 100%; /* Equivalent to w-full */
+    background-color: #38a169; /* Equivalent to bg-green-400 */
+    transition: all 0.7s; /* Equivalent to transition-all duration-700 */
+    animation: bounce 0.7s infinite; /* Equivalent to animate-bounce */
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.25rem); /* Adjust this value to control the bounce */
+    }
+  }
+  
