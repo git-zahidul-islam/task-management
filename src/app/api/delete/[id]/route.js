@@ -13,10 +13,10 @@ export async function DELETE(req, { params }) { // Named export for DELETE
     const result = await taskCollection.deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
-      return new Response(JSON.stringify({ success: false, message: 'Task not found' }), {
+    return new Response(JSON.stringify({ success: false, message: 'Task not found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
-      });
+    });
     }
 
     return new Response(JSON.stringify({ success: true, message: 'Task deleted successfully' }), {
