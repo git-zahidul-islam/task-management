@@ -3,11 +3,11 @@
 .skeleton {
   min-height: 100vh;
   min-width: 100vw;
-    height: 100%; /* Equivalent to h-full */
-    width: 100%; /* Equivalent to w-full */
-    background-color: #38a169; /* Equivalent to bg-green-400 */
-    transition: all 0.7s; /* Equivalent to transition-all duration-700 */
-    animation: bounce 0.7s infinite; /* Equivalent to animate-bounce */
+    height: 100%;
+    width: 100%; 
+    background-color: #38a169;
+    transition: all 0.7s;
+    animation: bounce 0.7s infinite; 
   }
   
   @keyframes bounce {
@@ -15,7 +15,7 @@
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-0.25rem); /* Adjust this value to control the bounce */
+      transform: translateY(-0.25rem); 
     }
   }
   

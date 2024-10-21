@@ -20,8 +20,8 @@ const EditTaskDialog = ({ task, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateTask(formData)).then(() => {
-      dispatch(fetchTasks()); // Re-fetch tasks to get the latest data
-      onClose(); // Close dialog after dispatch
+      dispatch(fetchTasks());
+      onClose();
     });
   };
   

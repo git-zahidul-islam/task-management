@@ -116,35 +116,31 @@ export const fetchTasks = () => async (dispatch) => {
 };
 
 // update
-// update
-// Thunk function for updating a task
-// Thunk function for updating a task
 export const updateTask = (taskData) => async (dispatch) => {
-    console.log("Updating task with ID:", taskData._id); // Debug log to see the ID
+    console.log("Updating task with ID:", taskData._id); 
     dispatch(taskUpdateRequest());
     try {
-        // Create a new object without the _id field
-        const { _id, ...updatedData } = taskData; // Destructure to exclude _id
+        const { _id, ...updatedData } = taskData;
 
         const response = await fetch(`http://localhost:3000/api/update/${_id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updatedData), // Send updatedData instead of taskData
+            body: JSON.stringify(updatedData),
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error("Update error response:", errorData); // Log the error response for debugging
+            console.error("Update error response:", errorData);
             throw new Error(errorData.message || 'Failed to update task');
         }
 
         const data = await response.json();
-        console.log("Update response data:", data); // Log the successful response data
-        dispatch(taskUpdateSuccess(data)); // Make sure the data structure matches your expectations
+        console.log("Update response data:", data);
+        dispatch(taskUpdateSuccess(data));
     } catch (error) {
-        console.error("Update task error:", error); // Log any errors caught
+        console.error("Update task error:", error);
         dispatch(taskUpdateFailure(error.message));
     }
 };

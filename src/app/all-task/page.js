@@ -1,10 +1,10 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "@/features/taskSlice";  // Import fetchTasks thunk
+import { fetchTasks } from "@/features/taskSlice";
 import Skeleton from "@/components/skeleton/Skeleton";
 import dynamic from "next/dynamic";
-import EditTaskDialog from "@/components/editTaskDialog/EditTaskDialog"; // Import your dialog
+import EditTaskDialog from "@/components/editTaskDialog/EditTaskDialog";
 
 const Card = dynamic(() => import('@/components/card/Card'), {
   loading: () => <Skeleton />,
@@ -14,14 +14,13 @@ const Card = dynamic(() => import('@/components/card/Card'), {
 export default function AllTask() {
   const dispatch = useDispatch();
   
-  // Use selectors to get state from Redux store
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const tasks = useSelector((state) => state.task.tasks);
 
-  // Fetch tasks when the component mounts
+
   useEffect(() => {
-    dispatch(fetchTasks());  // Dispatch fetchTasks thunk
+    dispatch(fetchTasks());
   }, [dispatch]);
 
   const handleEditClick = (task) => {
@@ -30,8 +29,8 @@ export default function AllTask() {
   };
 
   const handleDialogClose = () => {
-    setIsDialogOpen(false); // Close the dialog
-    setSelectedTask(null); // Reset selected task
+    setIsDialogOpen(false); 
+    setSelectedTask(null);
   };
 
   const handleDelete = (taskId) => {
@@ -39,9 +38,6 @@ export default function AllTask() {
     
   };
 
-  // Handle loading and error states
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="space-y-4 w-[50%] mx-auto">
@@ -55,7 +51,7 @@ export default function AllTask() {
           dueDate={task.dueDate}
           priority={task.priority}
           handleDelete={() => handleDelete(task._id)}
-          handleEdit={() => handleEditClick(task)} // Add edit handler
+          handleEdit={() => handleEditClick(task)}
         />
       ))}
      {isOpen && (
