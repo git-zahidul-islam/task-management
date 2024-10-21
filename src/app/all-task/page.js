@@ -16,6 +16,7 @@ export default function AllTask() {
   
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(null); // Track pending task deletion
   const tasks = useSelector((state) => state.task.tasks);
 
   useEffect(() => {
@@ -33,8 +34,23 @@ export default function AllTask() {
   };
 
   const handleDelete = (taskId) => {
-    // console.log(`Deleting task with id: ${taskId}`);
-    dispatch(deleteTask(taskId)); // Dispatch delete action here
+    setPendingDelete(taskId); // Set task for pending deletion
+
+    // Set timeout for task deletion
+    const deleteTimeout = setTimeout(() => {
+      dispatch(deleteTask(taskId));
+      setPendingDelete(null); // Clear pending delete state
+    }, 5000);
+
+    // Attach the timeout ID to be able to clear it if "Undo" is clicked
+    setPendingDelete({ taskId, deleteTimeout });
+  };
+
+  const handleUndo = () => {
+    if (pendingDelete) {
+      clearTimeout(pendingDelete.deleteTimeout); // Cancel the deletion
+      setPendingDelete(null); // Clear the pending delete state
+    }
   };
 
   return (
@@ -52,8 +68,22 @@ export default function AllTask() {
           handleEdit={() => handleEditClick(task)}
         />
       ))}
+
       {isOpen && (
-        <EditTaskDialog task={selectedTask} onClose={() => setIsOpen(false)} />
+        <EditTaskDialog task={selectedTask} onClose={handleDialogClose} />
+      )}
+
+      {/* Show "Undo" Snackbar when a task is pending deletion */}
+      {pendingDelete && (
+        <div className="fixed bottom-10 right-10 flex flex-col items-center justify-center p-4 bg-gray-800 text-white rounded shadow">
+          <p>Task will be deleted in 5 seconds</p>
+          <button 
+            onClick={handleUndo} 
+            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Undo
+          </button>
+        </div>
       )}
     </div>
   );
