@@ -57,6 +57,19 @@ const taskSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       },
+      // delete
+      taskDeleteRequest: (state) => {
+        state.loading = true;
+        state.error = null;
+      },
+      taskDeleteSuccess: (state, action) => {
+        state.loading = false;
+        state.tasks = state.tasks.filter(task => task._id !== action.payload);  
+      },
+      taskDeleteFailure: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      },
   },
 });
 
@@ -71,6 +84,9 @@ export const {
   taskUpdateRequest,
   taskUpdateSuccess,
   taskUpdateFailure,
+  taskDeleteRequest,
+  taskDeleteSuccess,
+  taskDeleteFailure,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;
@@ -143,5 +159,24 @@ export const updateTask = (taskData) => async (dispatch) => {
         console.error("Update task error:", error);
         dispatch(taskUpdateFailure(error.message));
     }
+};
+
+export const deleteTask = (taskId) => async (dispatch) => {
+  console.log(taskId);
+  
+  dispatch(taskDeleteRequest());
+  try {
+    const response = await fetch(`http://localhost:3000/api/delete/${taskId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete task');
+    }
+
+    dispatch(taskDeleteSuccess(taskId));
+  } catch (error) {
+    dispatch(taskDeleteFailure(error.message));
+  }
 };
 

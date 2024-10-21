@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "@/features/taskSlice";
+import { fetchTasks, deleteTask } from "@/features/taskSlice";
 import Skeleton from "@/components/skeleton/Skeleton";
 import dynamic from "next/dynamic";
 import EditTaskDialog from "@/components/editTaskDialog/EditTaskDialog";
@@ -18,7 +18,6 @@ export default function AllTask() {
   const [selectedTask, setSelectedTask] = useState(null);
   const tasks = useSelector((state) => state.task.tasks);
 
-
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
@@ -29,15 +28,14 @@ export default function AllTask() {
   };
 
   const handleDialogClose = () => {
-    setIsDialogOpen(false); 
+    setIsOpen(false); 
     setSelectedTask(null);
   };
 
   const handleDelete = (taskId) => {
-    console.log(`Deleting task with id: ${taskId}`);
-    
+    // console.log(`Deleting task with id: ${taskId}`);
+    dispatch(deleteTask(taskId)); // Dispatch delete action here
   };
-
 
   return (
     <div className="space-y-4 w-[50%] mx-auto">
@@ -50,11 +48,11 @@ export default function AllTask() {
           description={task.description}
           dueDate={task.dueDate}
           priority={task.priority}
-          handleDelete={() => handleDelete(task._id)}
+          handleDelete={() => handleDelete(task._id)} 
           handleEdit={() => handleEditClick(task)}
         />
       ))}
-     {isOpen && (
+      {isOpen && (
         <EditTaskDialog task={selectedTask} onClose={() => setIsOpen(false)} />
       )}
     </div>
