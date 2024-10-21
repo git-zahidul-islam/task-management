@@ -1,39 +1,27 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import './TaskCreate.css'; // Import the CSS file
+import './TaskCreate.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { createTask } from '../../features/taskSlice';
 
 const TaskCreate = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+  const { loading, error, success } = useSelector((state) => state.task);
 
-  const onSubmit = async (data) => {
-    try {
-        const res = await fetch('http://localhost:3000/api/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (!res.ok) {
-            throw new Error('Network response was not ok ' + res.statusText);
-        }
-
-        const responseData = await res.json(); 
-        console.log('Success:', responseData); 
-    } catch (error) {
-        console.error('Error:', error); 
-    }
+  const onSubmit = (data) => {
+    dispatch(createTask(data));
   };
 
   return (
     <section className="container">
       <h1 className="title">Task Create Form*</h1>
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="error-message">Error: {error}</p>}
+      {success && <p className="success-message">Task created successfully!</p>}
+
       <form onSubmit={handleSubmit(onSubmit)} className="form">
         {/* Task Name */}
         <div className="col-span-2">
