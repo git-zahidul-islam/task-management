@@ -13,7 +13,7 @@ const Card = dynamic(() => import('@/components/card/Card'), {
 
 export default function AllTask() {
   const dispatch = useDispatch();
-  
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [pendingDelete, setPendingDelete] = useState(null); // Track pending task deletion
@@ -29,7 +29,7 @@ export default function AllTask() {
   };
 
   const handleDialogClose = () => {
-    setIsOpen(false); 
+    setIsOpen(false);
     setSelectedTask(null);
   };
 
@@ -54,14 +54,17 @@ export default function AllTask() {
   };
 
   const handleComplete = (id) => {
-    console.log(id);
-    dispatch(completeTask(id))
-  }
+    dispatch(completeTask(id));
+    dispatch(fetchTasks());
+  };
+
+  // Sort tasks: completed tasks to the bottom
+  const sortedTasks = [...tasks].sort((a, b) => (a.status === "complete" ? 1 : -1));
 
   return (
-    <div className="space-y-4 w-[50%] mx-auto">
+    <div className="space-y-4 lg:w-[50%] md:w-[75%] w-[95%] mx-auto">
       <p>{tasks.length} tasks found</p>
-      {tasks.map((task) => (
+      {sortedTasks.map((task) => (
         <Card
           key={task._id}
           id={task._id}
@@ -69,8 +72,9 @@ export default function AllTask() {
           description={task.description}
           dueDate={task.dueDate}
           priority={task.priority}
-          handleComplete={()=> handleComplete(task._id)}
-          handleDelete={() => handleDelete(task._id)} 
+          status={task.status}  // Pass task status
+          handleComplete={() => handleComplete(task._id)}
+          handleDelete={() => handleDelete(task._id)}
           handleEdit={() => handleEditClick(task)}
         />
       ))}
