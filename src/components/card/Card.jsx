@@ -1,8 +1,15 @@
 import React from "react";
 
 const Card = ({ taskName, description, dueDate, priority, status, handleDelete, handleEdit, handleComplete }) => {
+    // Define background color classes based on priority
+    const priorityColor = {
+        low: `${status === 'complete' ? 'bg-gray-300 border-gray-600/40' : 'bg-green-100 border-green-300'}`,
+        medium: `${status === 'complete' ? 'bg-gray-300 border-gray-600/40' : 'bg-yellow-100 border-yellow-300'}`,
+        high: `${status === 'complete' ? 'bg-gray-300 border-gray-600/40' : 'bg-red-100 border-red-300'}`
+    };
+
     return (
-        <div className={`flex md:flex-row flex-col border rounded-lg shadow-md p-4 bg-white ${status === 'complete' ? 'bg-gray-200' : ''}`}>
+        <div className={`flex md:flex-row flex-col border rounded-lg shadow-md p-4 ${priorityColor[priority]} ${status === 'complete' ? 'bg-gray-200' : ''}`}>
             {/* Left Side */}
             <div className="flex-1 pr-4">
                 <h3 className={`text-xl font-semibold ${status === 'complete' ? 'line-through text-gray-500' : ''}`}>
@@ -28,7 +35,7 @@ const Card = ({ taskName, description, dueDate, priority, status, handleDelete, 
                     <button
                         onClick={handleEdit}
                         disabled={status === 'complete'}  // Disable button if status is complete
-                        className={`px-3 py-1 rounded ${status === 'complete' ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                        className={`px-3 py-1 rounded ${status === 'complete' ? 'bg-gray-400 cursor-not-allowed text-white/55' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
                     >
                         Edit
                     </button>
@@ -41,7 +48,7 @@ const Card = ({ taskName, description, dueDate, priority, status, handleDelete, 
                     <button
                         onClick={handleComplete}
                         disabled={status === 'complete'}  // Disable button if status is complete
-                        className={`px-3 py-1 rounded ${status === 'complete' ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}`}
+                        className={`px-3 py-1 rounded ${status === 'complete' ? 'bg-gray-400 cursor-not-allowed text-white/55' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}`}
                     >
                         Complete
                     </button>
