@@ -95,12 +95,16 @@ export default taskSlice.reducer;
 export const createTask = (taskData) => async (dispatch) => {
   dispatch(taskCreateRequest());
   try {
+    const createData = {
+      status: "pending",
+      ...taskData
+    }
     const response = await fetch('http://localhost:3000/api/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(taskData),
+      body: JSON.stringify(createData),
     });
 
     if (!response.ok) {
@@ -177,6 +181,29 @@ export const deleteTask = (taskId) => async (dispatch) => {
     dispatch(taskDeleteSuccess(taskId));
   } catch (error) {
     dispatch(taskDeleteFailure(error.message));
+  }
+};
+
+// Thunk function for marking task as complete
+export const completeTask = (taskId) => async (dispatch) => {
+  dispatch(taskUpdateRequest());
+  console.log("complee",taskId);
+  try {
+    const response = await fetch(`http://localhost:3000/api/complete/${taskId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to mark task as complete");
+    }
+
+    const data = await response.json();
+    dispatch(taskUpdateSuccess(data)); // Update the task state
+  } catch (error) {
+    dispatch(taskUpdateFailure(error.message));
   }
 };
 

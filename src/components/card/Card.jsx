@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card = ({taskName,description,dueDate,priority,handleDelete,handleEdit}) => {
+const Card = ({taskName,description,dueDate,priority,handleDelete,handleEdit,handleComplete}) => {
     return (
         <div className="flex border rounded-lg shadow-md p-4 bg-white">
             {/* Left Side */}
@@ -34,10 +34,10 @@ const Card = ({taskName,description,dueDate,priority,handleDelete,handleEdit}) =
                         Delete
                     </button>
                     <button
-                       
+                       onClick={handleComplete}
                         className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                     >
-                        Bookmark
+                        Complete
                     </button>
                 </div>
             </div>

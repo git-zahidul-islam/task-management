@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks, deleteTask } from "@/features/taskSlice";
+import { fetchTasks, deleteTask, completeTask } from "@/features/taskSlice";
 import Skeleton from "@/components/skeleton/Skeleton";
 import dynamic from "next/dynamic";
 import EditTaskDialog from "@/components/editTaskDialog/EditTaskDialog";
@@ -53,6 +53,11 @@ export default function AllTask() {
     }
   };
 
+  const handleComplete = (id) => {
+    console.log(id);
+    dispatch(completeTask(id))
+  }
+
   return (
     <div className="space-y-4 w-[50%] mx-auto">
       <p>{tasks.length} tasks found</p>
@@ -64,6 +69,7 @@ export default function AllTask() {
           description={task.description}
           dueDate={task.dueDate}
           priority={task.priority}
+          handleComplete={()=> handleComplete(task._id)}
           handleDelete={() => handleDelete(task._id)} 
           handleEdit={() => handleEditClick(task)}
         />

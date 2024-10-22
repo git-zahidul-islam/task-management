@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createTask } from '../../features/taskSlice';
 
 const TaskCreate = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit,reset, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.task);
 
   const onSubmit = (data) => {
     dispatch(createTask(data));
+    reset()
   };
 
   return (
